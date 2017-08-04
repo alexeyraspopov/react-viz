@@ -1,0 +1,187 @@
+.slide {
+  padding: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.slide::after {
+  top: 85%;
+  width: auto;
+  background: none;
+  color: inherit;
+  opacity: 0.4;
+}
+
+.slide h1,
+.slide h2,
+.slide p,
+.slide li {
+  font-family: PT Serif, Georgia, serif;
+  color: inherit;
+  line-height: 1.5;
+}
+
+.slide p,
+.slide li {
+  font-size: 1.5em;
+}
+
+.slide p code {
+  background: none;
+  padding: 0;
+}
+
+.slide .title {
+  font-size: 70px;
+  line-height: 1.5;
+  text-align: left;
+  margin: 0;
+}
+
+.slide .next.fade {
+  display: none;
+}
+
+.slide .next.fade.active {
+  display: block;
+  animation: fadeIn 200ms;
+}
+
+@keyframes fadeIn {
+  from {
+    font-size: 0;
+    opacity: 0;
+  }
+  to {
+    font-size: inherit;
+    opacity: 1;
+  }
+}
+
+.slide > p:only-child,
+.slide > ul:only-child,
+.slide > ol:only-child,
+.slide > pre:only-child {
+  margin-bottom: 0;
+}
+
+.slide code {
+  font-family: Fira Code, monospace;
+}
+
+.blueprint {
+  background: #3f51b5;
+  color: white;
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.darkside {
+  background: #222;
+  color: white;
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.yellow {
+  background: #ffeb3b;
+  color: #000;
+  border-color: #222;
+}
+
+.slide.blueprint pre code:not(:only-child)::before {
+  margin-left: -2.5em;
+  content: counter(code, decimal-leading-zero);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.slide.blueprint code.comment {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.slide.darkside li::before {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.slide.yellow li::before {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.accent { color: #ff5252; }
+.accent-2 { color: #00e5ff; }
+.accent-3 { color: #ffeb3b; }
+
+.secondary-accent { color: #ff5252; }
+
+.slide a {
+  background: none;
+  border-bottom: 0.05em solid;
+}
+
+.slide pre mark { margin: 0; }
+
+.slide .scene {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+button {
+  -webkit-appearance: none;
+  background: #ff5252;
+  color: white;
+  font: normal 18px/1 PT Sans;
+  border: none;
+  border-radius: 2px;
+  width: auto;
+  padding: 0.75em 1em;
+}
+
+button:hover {
+  background: #ff616e;
+}
+
+button:focus {
+  outline: none;
+}
+
+#motion p {
+  margin-bottom: 0.25em;
+}
+
+#axis svg,
+#axis2 svg {
+  width: 530px;
+  height: 40px;
+  padding: 12px;
+}
+
+#axis menu,
+#axis2 menu {
+  display: flex;
+  justify-content: center;
+  padding: 2em;
+}
+
+#axis text,
+#axis2 text {
+  font-size: 14px;
+  font-family: PT Sans;
+  fill: white;
+  text-anchor: middle;
+}
+
+#axis line,
+#axis2 line {
+  stroke: white;
+  stroke-width: 2px;
+}
+
+#contacts a {
+  color: white;
+  border-bottom: none;
+}

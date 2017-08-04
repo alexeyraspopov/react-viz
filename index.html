@@ -5,8 +5,8 @@
 	<meta charset="utf-8">
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400i,700,700i">
-	<link rel="stylesheet" href="https://alexeyraspopov.github.io/long-live-flux/node_modules/shower-ribbon/styles/screen-16x10.css">
+	<!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400i,700,700i"> -->
+	<link rel="stylesheet" href="node_modules/shower-ribbon/styles/screen-16x10.css">
 	<link rel="stylesheet" href="FiraCode/distr/fira_code.css">
 	<link rel="stylesheet" href="custom.css">
 </head>
@@ -16,12 +16,499 @@
 		<p><a href="https://alexeyraspopov.github.io/">Alexey Raspopov</a>, <a href="https://datarobot.com/">DataRobot</a>.</p>
 	</header>
 
+	<section class="slide">
+		<h2 class="title">React &amp; <br><span class="accent">Data Visualization</span></h2>
+	</section>
+
+	<section class="slide">
+		<ul>
+			<li>Software Engineer at <a href="https://datarobot.com">DataRobot</a></li>
+			<li>Create stuff and break stuff on <a href="https://github.com/alexeyraspopov">GitHub</a></li>
+			<li>Write stuff and retweet stuff in <a href="https://twitter.com/alexeyraspopov">Twitter</a></li>
+		</ul>
+	</section>
+
+	<section class="slide darkside">
+		<p><strong>Visualization</strong> &mdash; constructing visual representations of abstract data to <br><em class="accent">amplify cognition</em>.</p>
+	</section>
+
+	<section class="slide blueprint">
+		<pre><code class="comment">// package.json</code></pre>
+
+		<pre>
+			<code>"dependencies": {</code>
+			<code class="next fade">  "<span class="accent">d3</span>": "<span class="accent-2">4.10.0</span>",</code>
+			<code>  "<span class="accent">react</span>": "<span class="accent-2">15.6.1</span>",</code>
+			<code>  "<span class="accent">react-dom</span>": "<span class="accent-2">15.6.1</span>",</code>
+			<code class="next fade">  "<span class="accent">react-motion</span>": "<span class="accent-2">0.5.0</span>"</code>
+			<code>}</code>
+		</pre>
+	</section>
+
+	<section class="slide">
+		<h2 class="title">d<span class="accent">3</span></h2>
+	</section>
+
+	<section class="slide">
+		<h2 class="title">d3-{<span class="accent">scale</span>,<span class="accent">format</span>,<br><span class="accent">interpolate</span>,<span class="accent">array</span>,<br><span class="accent">shape</span>,<span class="accent">...</span>}</h2>
+	</section>
+
+	<section class="slide">
+		<ul>
+			<li>Set of tools and patterns</li>
+			<li>Data-driven approach</li>
+			<li>Pretty old but yet up to date</li>
+		</ul>
+	</section>
+
+	<section class="slide blueprint">
+		<pre>
+			<code>import { scaleLinear } from 'd3';</code>
+			<code>const scale = <span class="accent-2">scaleLinear</span>()</code>
+			<code class="next">  .domain([0, 1])</code>
+			<code class="next">  .range([0, 360]);</code>
+		</pre>
+
+		<pre>
+			<code class="next">scale(0.5);</code>
+			<code class="next comment">// > 180</code>
+		</pre>
+	</section>
+
+	<section class="slide blueprint">
+		<p><code><span class="accent">scaleLinear</span>(), <span class="accent">scaleOrdinal</span>(), <span class="accent">scaleThreshold</span>(), <span class="accent">scaleTime</span>(), ...</code></p>
+	</section>
+
+	<section class="slide darkside" id="axis">
+		<!-- X Axis Demo -->
+	</section>
+
+	<section class="slide">
+		<ol>
+			<li>D3 API is about chaining calls in favor of creating DOM Elements</li>
+			<li>React is about defining DOM Elements</li>
+		</ol>
+	</section>
+
+	<section class="slide blueprint">
+		<pre>
+			<code>random = d3.<span class="accent">randomNormal</span>(0.5, 0.15);</code>
+			<code class="next">sample = d3.<span class="accent">range</span>(0, 1000).<span class="accent">map</span>(random);</code>
+			<code class="next">domain = d3.<span class="accent">extent</span>(sample);</code>
+			<code class="next">binsCount = d3.<span class="accent">thresholdFreedmanDiaconis</span>(sample, ...domain);</code>
+			<div class="next">
+				<code>histogram = d3.<span class="accent">histogram</span>().<span class="accent">domain</span>(domain)</code>
+				<code>              .<span class="accent">thresholds</span>(binsCount)(sample);</code>
+			</div>
+			<code class="next">binDomain = [0, d3.<span class="accent">max</span>(histogram, b => b.length)];</code>
+			<code class="next">scale = d3.<span class="accent">scaleLinear</span>().<span class="accent">domain</span>(binDomain).<span class="accent">range</span>([0, width]);</code>
+		</pre>
+	</section>
+
+	<section class="slide blueprint">
+		<pre>
+			<code>&lt;Axis</code>
+			<code>  scale={scale}</code>
+			<code>  format={scale.tickFormat(null, 's')} /&gt;</code>
+		</pre>
+	</section>
+
+	<section class="slide blueprint">
+		<pre style="font-size: 80%">
+			<code>function Axis({ scale, format }) {</code>
+			<code>  const [x1, x2] = <mark>scale.range</mark>();</code>
+      <code>  const styles = <mark>scale.ticks</mark>().map((t) => ({</code>
+      <code>    key: String(t),</code>
+      <code>    data: <mark>format</mark>(t),</code>
+      <code>    style: {</code>
+      <code>      translate: <mark>scale</mark>(t),</code>
+      <code>    },</code>
+      <code>  }));</code>
+      <code class="comment">  // ...</code>
+			<code>}</code>
+		</pre>
+	</section>
+
+	<section class="slide blueprint">
+		<pre style="font-size: 80%">
+			<code>function Axis({ scale, format }) {</code>
+			<code class="comment">  // ...</code>
+      <code>  return (</code>
+      <code>    &lt;g&gt;</code>
+      <code>      &lt;line x1={x1} x2={x2} y1={0} y2={0} /&gt;</code>
+      <code>      {<mark>styles.map</mark>(({ key, data, style }) =&gt; (</code>
+      <div class="next fade">
+				<code>        &lt;g key={key} transform={`translate(${style.translate}, 0)`}&gt;</code>
+	      <code>          &lt;text y={21}&gt;{data}&lt;/text&gt;</code>
+	      <code>          &lt;line y2={7} /&gt;</code>
+	      <code>        &lt;/g&gt;</code>
+			</div>
+      <code>      ))}</code>
+      <code>    &lt;/g&gt;</code>
+      <code>  );</code>
+			<code>}</code>
+		</pre>
+	</section>
+
+	<section class="slide darkside">
+		<p class="title">Animation<em class="accent">?</em></p>
+	</section>
+
+	<section class="slide">
+		<figure>
+			<blockquote>
+				<p>Animation APIs parameterized by eg duration and curve are fundamentally opposed to continuous, fluid interactivity.</p>
+			</blockquote>
+			<figcaption>&mdash; Andy Matuschak (@andy_matuschak) <a href="https://twitter.com/andy_matuschak/status/566736015188963328">February 14, 2015</a></figcaption>
+		</figure>
+	</section>
+
+	<section class="slide">
+		<h2 class="title">react-<span class="accent">motion</span></h2>
+	</section>
+
+	<section class="slide darkside" id="motion">
+		<!-- React Motion Basic Demo -->
+	</section>
+
+	<section class="slide blueprint">
+		<pre>
+			<code>function Counter(props) {</code>
+			<code>  return (</code>
+			<code>    <mark>&lt;p&gt;{ props.number }&lt;/p&gt;</mark></code>
+			<code>  );</code>
+			<code>}</code>
+		</pre>
+	</section>
+
+	<section class="slide blueprint">
+		<pre>
+			<code>function Counter(props) {</code>
+			<code>  return (</code>
+			<code>    &lt;<span class="accent">Motion</span> style={{ number: <span class="accent-2">spring</span>(props.number) }}&gt;</code>
+			<code>      {state => <mark>&lt;p&gt;{ state.number }&lt;/p&gt;</mark>}</code>
+			<code>    &lt;/<span class="accent">Motion</span>&gt;</code>
+			<code>  );</code>
+			<code>}</code>
+		</pre>
+	</section>
+
+	<section class="slide">
+		<ul>
+			<li>Laws of Physics instead of magic numbers</li>
+			<li>Just wraps already existing content</li>
+			<li>Can be terminated in the middle which is good for UX</li>
+		</ul>
+	</section>
+
+	<section class="slide darkside" id="axis2">
+		<!-- X Axis Demo -->
+	</section>
+
+	<section class="slide blueprint">
+		<pre style="font-size: 80%">
+			<code>function Axis({ scale, format }) {</code>
+			<code>  const [x1, x2] = scale.range();</code>
+      <code>  const styles = scale.ticks().map((t) => ({</code>
+      <code>    key: String(t),</code>
+      <code>    data: format(t),</code>
+      <code>    style: {</code>
+      <code>      translate: <mark>spring(scale(t))</mark>,</code>
+      <code>      opacity: <mark>spring(1)</mark>,</code>
+      <code>    },</code>
+      <code>  }));</code>
+      <code class="comment">  // ...</code>
+      <code>}</code>
+		</pre>
+	</section>
+
+	<section class="slide blueprint">
+		<pre style="font-size: 80%">
+			<code>function Axis({ scale, format }) {</code>
+      <code class="comment">  // ...</code>
+			<code>  return (</code>
+			<code>    &lt;<span class="accent-2">TransitionMotion</span> styles={styles}&gt;</code>
+      <code>      {styles =&gt; (</code>
+      <code>        // old render results</code>
+      <code>      )}</code>
+      <code>    &lt;/<span class="accent-2">TransitionMotion</span>&gt;</code>
+      <code>  );</code>
+			<code>}</code>
+		</pre>
+	</section>
+
+	<section class="slide darkside" id="distribution">
+		<!-- Distribution Demo -->
+	</section>
+
+	<section class="slide">
+		<p><a href="https://github.com/alexeyraspopov/distribution-chart">github.com/alexeyraspopov/distribution-chart</a></p>
+	</section>
+
+	<section class="slide">
+		<h2>Useful links</h2>
+		<ul>
+			<li><a href="https://medium.com/@mbostock/introducing-d3-scale-61980c51545f">Introducing d3-scale &mdash; Mike Bostock</a></li>
+			<li><a href="https://www.youtube.com/watch?v=1tavDv5hXpo">The State of Animation in React &mdash; Cheng Lou</a></li>
+		</ul>
+	</section>
+
+	<section class="slide darkside" id="contacts">
+		<h2>Like, share, subscribe</h2>
+
+		<ul>
+			<li><a href="https://twitter.com/alexeyraspopov">twitter.com/<span class="accent">alexeyraspopov</span></a></li>
+			<li><a href="https://github.com/alexeyraspopov">github.com/<span class="accent">alexeyraspopov</span></a></li>
+		</ul>
+
+		<p><a href="https://alexeyraspopov.github.io/react-viz">alexeyraspopov.github.io/react-viz</a></p>
+	</section>
+
 	<footer class="badge">
 		<a href="https://github.com/shower/shower">Powered by Shower</a>
 	</footer>
 
-  <script src="https://alexeyraspopov.github.io/long-live-flux/node_modules/shower-core/shower.min.js"></script>
-  <script src="https://alexeyraspopov.github.io/long-live-flux/highlight.js"></script>
+  <script src="node_modules/shower-core/shower.min.js"></script>
+	<script src="node_modules/babel-standalone/babel.min.js"></script>
+  <script src="highlight.js"></script>
+	<script src="node_modules/d3/build/d3.js" charset="utf-8"></script>
+	<script src="node_modules/d3-interpolate-path/build/d3-interpolate-path.js" charset="utf-8"></script>
+	<script src="node_modules/react/dist/react.js" charset="utf-8"></script>
+	<script src="node_modules/react-dom/dist/react-dom.js" charset="utf-8"></script>
+	<script src="node_modules/react-motion/build/react-motion.js" charset="utf-8"></script>
+
+	<script type="text/jsx">
+		const { TransitionMotion, spring } = ReactMotion;
+
+		function TransitionAxis({ scale, format }) {
+			const [x1, x2] = scale.range();
+
+			const styles = scale.ticks().map((t) => ({
+				key: String(t),
+				data: format(t),
+				style: {
+					translate: spring(scale(t)),
+					opacity: spring(1),
+				},
+			}));
+
+			return (
+				<TransitionMotion styles={styles} willEnter={getEnterStyles} willLeave={getLeaveStyles}>
+					{(styles) => (
+						<g>
+							<line x1={x1} x2={x2} y1={0} y2={0} />
+							{styles.map(({ key, data, style }) => (
+								<g key={key} transform={`translate(${style.translate}, 0)`} opacity={style.opacity}>
+									<text y={21}>{data}</text>
+									<line y2={7} />
+								</g>
+						  ))}
+						</g>
+					)}
+				</TransitionMotion>
+			);
+		}
+
+		function getEnterStyles({ style }) {
+			return { translate: style.translate.val, opacity: 0 };
+		}
+
+		function getLeaveStyles({ style }) {
+			return { translate: style.translate, opacity: spring(0) };
+		}
+
+		class AxisMotionDemo extends React.Component {
+			constructor(props) {
+				super(props);
+				this.state = { sample: this.getRandomSample() };
+				this.generate = this.generate.bind(this);
+			}
+
+			getRandomSample() {
+				const random = d3.randomNormal(0.5, 0.15);
+				return d3.range(0, 1000).map(random);
+			}
+
+			generate() {
+				this.setState(() => ({ sample: this.getRandomSample() }));
+			}
+
+			render() {
+				const binsCount = d3.thresholdFreedmanDiaconis(this.state.sample, 0, 1);
+				const histogram = d3.histogram().domain([0, 1]).thresholds(binsCount)(this.state.sample);
+				const peak = d3.max(histogram, b => b.length);
+				const scale = d3.scaleLinear().domain([0, peak]).range([0, this.props.width]);
+
+				return (
+					<div className="scene">
+						<svg>
+							<TransitionAxis scale={scale} format={scale.tickFormat(null, 's')} />
+						</svg>
+						{this.props.showButton && (
+							<menu>
+								<button onClick={this.generate}>Get Another Sample</button>
+							</menu>
+						)}
+					</div>
+				)
+			}
+		}
+
+		ReactDOM.render(<AxisMotionDemo width={500} />, document.querySelector('#axis'));
+		ReactDOM.render(<AxisMotionDemo width={500} showButton={true} />, document.querySelector('#axis2'));
+	</script>
+
+	<script type="text/jsx">
+  	const { Motion, spring } = ReactMotion;
+
+		class ReactMotionBasicDemo extends React.Component {
+			constructor(props) {
+				super(props);
+				this.state = { number: this.getRandomNumber() };
+				this.generate = this.generate.bind(this);
+			}
+
+			getRandomNumber() {
+				return Math.floor(Math.random() * 1000);
+			}
+
+			format(number) {
+				return number.toLocaleString('en', {
+					minimumFractionDigits: 0,
+					maximumFractionDigits: 0,
+				});
+			}
+
+			generate() {
+				this.setState(() => ({ number: this.getRandomNumber() }));
+			}
+
+			render() {
+				return (
+					<div className="scene">
+						<Motion style={{ number: spring(this.state.number) }}>
+							{state => (<p className="title">{ this.format(state.number) }</p>)}
+						</Motion>
+						<menu>
+							<button onClick={this.generate}>Get Another Number</button>
+						</menu>
+					</div>
+				)
+			}
+		}
+
+		ReactDOM.render(<ReactMotionBasicDemo />, document.querySelector('#motion'));
+	</script>
+
+	<script type="text/jsx">
+		const { Motion, spring } = ReactMotion;
+
+		function Definitions() {
+			return (
+				<defs>
+					<linearGradient id="fill" x1={0} y1={0} x2={0} y2={1}>
+						<stop offset="0%" stopColor="#6086d6" stopOpacity={0.2} />
+						<stop offset="100%" stopColor="#6086d6" stopOpacity={0} />
+					</linearGradient>
+
+					<pattern id="diagonalHatch" patternUnits="userSpaceOnUse" width={6} height={6}>
+						<path
+							d="M 0,6 l 6,-6 M -1.5,1.5 l 3,-3 M 4.5,7.5 l 3,-3"
+							stroke="#15152d"
+							strokeWidth={1}
+							strokeLinecap="square"
+							shapeRendering="auto" />
+					</pattern>
+				</defs>
+			)
+		}
+
+		class DistributionShape extends React.Component {
+			constructor(props) {
+				super(props);
+				this.state = { prev: this.getPath(), direction: 1 };
+			}
+
+			getPath() {
+				const { histogram, xScale, yScale } = this.props;
+				const getX = (a) => xScale((a.x0 + a.x1) / 2);
+				const getY = (a) => yScale(a.length);
+				return d3.line().x(getX).y(getY).curve(d3.curveBasis)(histogram);
+			}
+
+			componentWillReceiveProps(nextProps) {
+				this.setState(state => ({
+					prev: this.getPath(),
+					direction: 1 - state.direction
+				}));
+			}
+
+			render() {
+				const { fill } = this.props;
+				const i = this.state.direction === 1
+					? d3.interpolatePath(this.state.prev, this.getPath())
+					: d3.interpolatePath(this.getPath(), this.state.prev);
+
+				return (
+					<Motion style={{ progress: spring(this.state.direction) }}>
+						{state => (
+							<g>
+								<path d={i(state.progress)} fill={fill[0]} stroke="transparent" strokeWidth={2} />
+								<path d={i(state.progress)} fill={fill[1]} stroke="rgba(96, 134, 214, 0.6)" strokeWidth={2} />
+							</g>
+						)}
+					</Motion>
+				)
+			}
+		}
+
+		class DistributionDemo extends React.Component {
+			constructor(props) {
+				super(props);
+				this.state = { sample: this.getRandomSample() };
+				this.generate = this.generate.bind(this);
+			}
+
+			getRandomSample() {
+				const random = d3.randomNormal(0.5, 0.15);
+				return d3.range(0, 1000).map(random);
+			}
+
+			generate() {
+				this.setState(() => ({ sample: this.getRandomSample() }));
+			}
+
+			render() {
+				const binsCount = d3.thresholdFreedmanDiaconis(this.state.sample, 0, 1);
+				const histogram = d3.histogram().domain([0, 1]).thresholds(binsCount)(this.state.sample);
+				const peak = d3.max(histogram, b => b.length);
+				const xScale = d3.scaleLinear().domain([0, 1]).range([0, this.props.width]);
+				const yScale = d3.scaleLinear().domain([0, peak]).range([this.props.height, 0]);
+
+				return (
+					<div className="scene">
+						<svg style={{ width: this.props.width, height: this.props.height, margin: this.props.margin }}>
+							<Definitions />
+							<DistributionShape
+								histogram={histogram}
+								xScale={xScale}
+								yScale={yScale}
+								fill={["url(#diagonalHatch)", "url(#fill)"]} />
+						</svg>
+						<menu>
+							<button onClick={this.generate}>Get Another Sample</button>
+						</menu>
+					</div>
+				);
+			}
+		}
+
+		ReactDOM.render(<DistributionDemo width={500} height={300} margin="1.5em" />, document.querySelector('#distribution'));
+	</script>
+
+	<script type="text/jsx">
+
+	</script>
 	<!-- Copyright © 2017 Alexey Raspopov. -->
 </body>
 </html>

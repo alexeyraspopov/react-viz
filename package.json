@@ -1,0 +1,13 @@
+{
+  "name": "react-viz",
+  "dependencies": {
+    "babel-standalone": "~6.25.0",
+    "d3": "~4.10.0",
+    "d3-interpolate-path": "~2.0.0",
+    "react": "~15.6.1",
+    "react-dom": "~15.6.1",
+    "react-motion": "~0.5.0",
+    "shower-core": "~2.1.0",
+    "shower-ribbon": "~2.0.10"
+  }
+}
